@@ -7,8 +7,8 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Selection import unfold_entities
 from rdkit import Chem
 
-from utils.protein_ligand import PDBProtein
-from sample import *    # Import everything from `sample.py`
+from mol_gen.models.TDSBDD.utils.protein_ligand import PDBProtein
+from mol_gen.models.TDSBDD.sample import *    # Import everything from `sample.py`
 
 
 def pdb_to_pocket_data(pdb_path, center, bbox_size):
@@ -77,6 +77,7 @@ if __name__ == '__main__':
     parser.add_argument('--outdir', type=str, default='./outputs')
     args = parser.parse_args()
 """
+
 def sample(config, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
     # Load configs
     config_path = config
@@ -90,7 +91,6 @@ def sample(config, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
         os.path.basename(pdb_path),
     ))
     logger = get_logger('sample', log_dir)
-    logger.info(args)
     logger.info(config)
     shutil.copyfile(config_path, os.path.join(log_dir, os.path.basename(config_path)))    
     shutil.copyfile(pdb_path, os.path.join(log_dir, os.path.basename(pdb_path)))    

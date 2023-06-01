@@ -10,16 +10,16 @@ from tqdm.auto import tqdm
 from rdkit import Chem
 from scipy.special import softmax
 
-from models.maskfill import MaskFillModel
-from models.frontier import FrontierNetwork
-from models.sample import *
-from models.sample_grid import *
-from utils.transforms import *
-from utils.datasets import get_dataset
-from utils.misc import *
-from utils.data import FOLLOW_BATCH
-from utils.reconstruct import *
-from utils.chem import *
+from mol_gen.models.TDSBDD.models.maskfill import MaskFillModel
+from mol_gen.models.TDSBDD.models.frontier import FrontierNetwork
+from mol_gen.models.TDSBDD.models.sample import *
+from mol_gen.models.TDSBDD.models.sample_grid import *
+from mol_gen.models.TDSBDD.utils.transforms import *
+from mol_gen.models.TDSBDD.utils.datasets import get_dataset
+from mol_gen.models.TDSBDD.utils.misc import *
+from mol_gen.models.TDSBDD.utils.data import FOLLOW_BATCH
+from mol_gen.models.TDSBDD.utils.reconstruct import *
+from mol_gen.models.TDSBDD.utils.chem import *
 
 
 STATUS_RUNNING = 'running'

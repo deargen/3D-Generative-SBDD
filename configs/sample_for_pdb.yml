@@ -1,9 +1,9 @@
 
 model:
   main:
-    checkpoint: /aicenter2/mol_generation/ckpts/3DSBDD/main_model.pt
+    checkpoint: /aicenter2/mol_generation/ckpts/TDSBDD/main_model.pt
   frontier:
-    checkpoint: /aicenter2/mol_generation/ckpts/3DSBDD/frontier_model.pt
+    checkpoint: /aicenter2/mol_generation/ckpts/TDSBDD/frontier_model.pt
 
 sample:
   seed: 100
