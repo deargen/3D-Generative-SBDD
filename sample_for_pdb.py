@@ -62,7 +62,7 @@ def pdb_to_pocket_data(pdb_path, center, bbox_size):
     )
     return data
 
-
+"""
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--pdb_path', type=str,
@@ -76,22 +76,24 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default='cuda')
     parser.add_argument('--outdir', type=str, default='./outputs')
     args = parser.parse_args()
-
+"""
+def sample(config, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
     # Load configs
-    config = load_config(args.config)
-    config_name = os.path.basename(args.config)[:os.path.basename(args.config).rfind('.')]
+    config_path = config
+    config = load_config(config)
+    config_name = os.path.basename(config_path)[:os.path.basename(config_path).rfind('.')]
     seed_all(config.sample.seed)
 
     # Logging
-    log_dir = get_new_log_dir(args.outdir, prefix='%s-%s' % (
+    log_dir = get_new_log_dir(outdir, prefix='%s-%s' % (
         config_name, 
-        os.path.basename(args.pdb_path),
+        os.path.basename(pdb_path),
     ))
     logger = get_logger('sample', log_dir)
     logger.info(args)
     logger.info(config)
-    shutil.copyfile(args.config, os.path.join(log_dir, os.path.basename(args.config)))    
-    shutil.copyfile(args.pdb_path, os.path.join(log_dir, os.path.basename(args.pdb_path)))    
+    shutil.copyfile(config_path, os.path.join(log_dir, os.path.basename(config_path)))    
+    shutil.copyfile(pdb_path, os.path.join(log_dir, os.path.basename(pdb_path)))    
 
 
     protein_featurizer = FeaturizeProteinAtom()
@@ -105,29 +107,29 @@ if __name__ == '__main__':
         FeaturizeLigandBond(),
         masking,
     ])
-    data = pdb_to_pocket_data(args.pdb_path, args.center, args.bbox_size)
+    data = pdb_to_pocket_data(pdb_path, center, bbox_size)
     data = transform(data)
 
     # Model (Main)
     logger.info('Loading main model...')
-    ckpt = torch.load(config.model.main.checkpoint, map_location=args.device)
+    ckpt = torch.load(config.model.main.checkpoint, map_location=device)
     model = MaskFillModel(
         ckpt['config'].model, 
         num_classes = contrastive_sampler.num_elements,
         protein_atom_feature_dim = protein_featurizer.feature_dim,
         ligand_atom_feature_dim = ligand_featurizer.feature_dim,
         num_indicators = len(ATOM_FAMILIES)
-    ).to(args.device)
+    ).to(device)
     model.load_state_dict(ckpt['model'])
 
     # Model (Frontier Network)
     logger.info('Loading frontier model...')
-    ckpt_ft = torch.load(config.model.frontier.checkpoint, map_location=args.device)
+    ckpt_ft = torch.load(config.model.frontier.checkpoint, map_location=device)
     ftnet = FrontierNetwork(
         ckpt_ft['config'].model,
         protein_atom_feature_dim = protein_featurizer.feature_dim,
         ligand_atom_feature_dim = ligand_featurizer.feature_dim,
-    ).to(args.device)
+    ).to(device)
     ftnet.load_state_dict(ckpt_ft['model'])
 
 
@@ -148,7 +150,7 @@ if __name__ == '__main__':
     while len(pool.queue) < config.sample.num_samples:
         queue_size_before = len(pool.queue)
         pool.queue += get_init_samples(
-            data = data.to(args.device), 
+            data = data.to(device), 
             model = model,
             default_max_retry = config.sample.num_retry,
         )
@@ -174,7 +176,7 @@ if __name__ == '__main__':
             for data in tqdm(pool.queue):
                 nexts = []
                 data_next_list = get_next(
-                    data.to(args.device), 
+                    data.to(device), 
                     ftnet = ftnet,
                     model = model,
                     logger = logger,

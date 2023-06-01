@@ -1,12 +1,12 @@
 
 model:
   main:
-    checkpoint: ./pretrained/main_model.pt
+    checkpoint: /aicenter2/mol_generation/ckpts/3DSBDD/main_model.pt
   frontier:
-    checkpoint: ./pretrained/frontier_model.pt
+    checkpoint: /aicenter2/mol_generation/ckpts/3DSBDD/frontier_model.pt
 
 sample:
-  seed: 2020
+  seed: 100
   num_samples: 100
   beam_size: 300
   logp_thres: -.inf
