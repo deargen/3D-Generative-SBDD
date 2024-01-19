@@ -64,7 +64,6 @@ dependencies:
   - libiconv=1.15
   - libidn2=2.3.2
   - libpng=1.6.37
-  - libprotobuf=3.15.8
   - libstdcxx-ng=9.3.0
   - libtasn1=4.16.0
   - libtiff=4.2.0
@@ -99,7 +98,6 @@ dependencies:
   - pillow=8.4.0
   - pip=21.2.4
   - pixman=0.38.0
-  - protobuf=3.15.8
   - pthread-stubs=0.4
   - pyasn1=0.4.8
   - pyasn1-modules=0.2.7
@@ -168,3 +166,7 @@ dependencies:
   - zipp=3.7.0
   - zlib=1.2.11
   - zstd=1.4.9
+  - pip:
+      - protobuf==4.23.2
+      - ray[data,train,tune,serve]==2.9.0
+      - GPUtil==1.4.0

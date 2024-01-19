@@ -32,6 +32,11 @@ The code has been tested in the following environment:
 conda env create -f env_cuda113.yml
 conda activate SBDD-3D
 ```
+To use in mol_gen repository
+```bash
+cd {molgen project path}
+bash scripts/install_dev.sh
+```
 
 ### Install Manually
 ```bash
