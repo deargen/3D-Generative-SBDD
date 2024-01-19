@@ -269,8 +269,6 @@ def sample(config, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
     except KeyboardInterrupt:
         logger.info("Terminated. Generated molecules will be saved.")
 
-    torch.save(pool, os.path.join(log_dir, "samples_all.pt"))
-
     sdf_dir = os.path.join(log_dir, "SDF")
     os.makedirs(sdf_dir)
     with open(os.path.join(log_dir, "SMILES.txt"), "a") as smiles_f:
