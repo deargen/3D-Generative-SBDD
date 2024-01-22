@@ -196,6 +196,8 @@ def sample(config, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
     try:
         while len(pool.finished) < config.sample.num_samples:
             global_step += 1
+            if global_step > config.sample.max_steps:
+                break
             queue_size = len(pool.queue)
 
             queue_tmp = []
