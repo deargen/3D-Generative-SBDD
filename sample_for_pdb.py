@@ -108,18 +108,10 @@ def sample(config_path, center, outdir, pdb_path, device="cuda:1", bbox_size=23.
     seed_all(config.sample.seed)
 
     # Logging
-    log_dir = get_new_log_dir(
-        outdir,
-        prefix="%s-%s"
-        % (
-            config_name,
-            os.path.basename(pdb_path),
-        ),
-    )
-    logger = get_logger("sample", log_dir)
+    logger = get_logger("sample", outdir)
     logger.info(config)
-    shutil.copyfile(config_path, os.path.join(log_dir, os.path.basename(config_path)))
-    shutil.copyfile(pdb_path, os.path.join(log_dir, os.path.basename(pdb_path)))
+    shutil.copyfile(config_path, os.path.join(outdir, os.path.basename(config_path)))
+    shutil.copyfile(pdb_path, os.path.join(outdir, os.path.basename(pdb_path)))
 
     protein_featurizer = FeaturizeProteinAtom()
     ligand_featurizer = FeaturizeLigandAtom()
@@ -270,9 +262,9 @@ def sample(config_path, center, outdir, pdb_path, device="cuda:1", bbox_size=23.
     except KeyboardInterrupt:
         logger.info("Terminated. Generated molecules will be saved.")
 
-    sdf_dir = os.path.join(log_dir, "SDF")
+    sdf_dir = os.path.join(outdir, "SDF")
     os.makedirs(sdf_dir)
-    with open(os.path.join(log_dir, "SMILES.txt"), "a") as smiles_f:
+    with open(os.path.join(outdir, "SMILES.txt"), "a") as smiles_f:
         for i, data_finished in enumerate(pool["finished"]):
             smiles_f.write(data_finished.smiles + "\n")
             writer = Chem.SDWriter(os.path.join(sdf_dir, "%d.sdf" % i))
