@@ -99,10 +99,9 @@ if __name__ == '__main__':
 """
 
 
-def sample(config, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
+def sample(config_path, center, outdir, pdb_path, device="cuda:1", bbox_size=23.0):
     # Load configs
-    config_path = config
-    config = load_config(config)
+    config = load_config(config_path)
     config_name = os.path.basename(config_path)[
         : os.path.basename(config_path).rfind(".")
     ]
